@@ -1,32 +1,37 @@
 #include <bits/stdc++.h>
 #include <fstream>
-#include <json/json.h> // or jsoncpp/json.h , or json/json.h etc.
+#include <json/json.h>
 #include <algorithm>
 std::string _rename(std::string name);//function that takes string and converts characters that are either letter or integer into a hexadecimal (definition after the main function)
 const char *values = "0123456789abcdef";
-void go_through(Json::Value obj, Json::Value &objNew);
-void go_through_array(Json::Value obj, Json::Value &arrNew);
+void go_through(Json::Value obj, Json::Value &objNew); //function recursively going through object of its own.
+void go_through_array(Json::Value obj, Json::Value &arrNew); //function recursively going through its own arrays.
 
 
 
-Json::Value objNew;
+Json::Value objNew; // json object in which we will save our converted everything.
 int main()
 {
-    std::string a;
+    //opening files
     std::ifstream in("in.json");
     std::ofstream out("out.json");
-    Json::Value obj;
 
+    //parsing from file to object obj
+    Json::Value obj;
     Json::Reader reader;
     reader.parse(in, obj);
+
+    //starting recursion
     go_through(obj, objNew);
+
+    //printing converted object to file
     out<<objNew;
-    //std::cout<<'\\';
-    //std::cout << string_to_hex("a");
+
+    //closing files
     in.close();
     out.close();
 }
-std::string _rename(std::string name)
+std::string _rename(std::string name) //string to hex converter (a char at a time)
 {
     std::string hex="";
     for(auto i = name.begin(); i != name.end(); i++)
@@ -37,7 +42,7 @@ std::string _rename(std::string name)
         hex.push_back(values[r]);
 
     }
-    std::cout << name << " - " <<hex<< "\n";
+    std::cout << name << " - " <<hex<< "\n";  //printing map of all converted values to terminal
     return hex;
 }
 void go_through(Json::Value obj, Json::Value &objNew)
