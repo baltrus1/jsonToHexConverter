@@ -16,16 +16,22 @@ int main()
     std::ifstream in("in.json");
     std::ofstream out("out.json");
 
-    //parsing from file to object obj
+
     Json::Value obj;
     Json::Reader reader;
-    reader.parse(in, obj);
+    if(reader.parse(in, obj))  //parsing from file to object obj
+    {
 
-    //starting recursion
-    go_through(obj, objNew);
+        //starting recursion
+        go_through(obj, objNew);
 
-    //printing converted object to file
-    out<<objNew;
+        //printing converted object to file
+        out<<objNew;
+    }
+    else std::cout << "Parsing error: input file could not have been converted because it does not meet the requirements for '.json' standard. Output file has not been created/changed"<<'\n';
+
+
+
 
     //closing files
     in.close();
@@ -42,7 +48,7 @@ std::string _rename(std::string name) //string to hex converter (a char at a tim
         hex.push_back(values[r]);
 
     }
-    std::cout << name << " - " <<hex<< "\n";  //printing map of all converted values to terminal
+    std::cout << name << " - " <<hex<< '\n';  //printing map of all converted values to terminal
     return hex;
 }
 void go_through(Json::Value obj, Json::Value &objNew)
@@ -81,10 +87,10 @@ void go_through_array(Json::Value obj, Json::Value &arrNew)
             go_through(obj[i], arrNew[i]);
         }
         else if(obj[i].isArray())
- {
+        {
             arrNew[i] = Json::arrayValue;
             go_through_array(obj[i], arrNew[i]);
-}
+        }
         else arrNew[i] = obj[i];
 
 }
