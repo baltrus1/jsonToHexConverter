@@ -2,12 +2,13 @@
 #include <fstream>
 #include <json/json.h>
 #include <algorithm>
-std::string _rename(std::string name);//function that takes string and converts characters that are either letter or integer into a hexadecimal (definition after the main function)
+
 const char *values = "0123456789abcdef";
+
+std::string _rename(std::string name);//function that takes string and converts characters that are either letter or integer into a hexadecimal (definition after the main function)
+
 void go_through(Json::Value obj, Json::Value &objNew); //function recursively going through object of its own.
 void go_through_array(Json::Value obj, Json::Value &arrNew); //function recursively going through its own arrays.
-
-
 
 Json::Value objNew; // json object in which we will save our converted everything.
 int main()
@@ -16,9 +17,9 @@ int main()
     std::ifstream in("in.json");
     std::ofstream out("out.json");
 
-
     Json::Value obj;
     Json::Reader reader;
+
     if(reader.parse(in, obj))  //parsing from file to object obj
     {
 
@@ -29,9 +30,6 @@ int main()
         out<<objNew;
     }
     else std::cout << "Parsing error: input file could not have been converted because it does not meet the requirements for '.json' standard. Output file has not been created/changed"<<'\n';
-
-
-
 
     //closing files
     in.close();
@@ -46,7 +44,6 @@ std::string _rename(std::string name) //string to hex converter (a char at a tim
         int d = *i/16, r = *i%16; //d - divider, r - remainder
         hex.push_back(values[d]);
         hex.push_back(values[r]);
-
     }
     std::cout << name << " - " <<hex<< '\n';  //printing map of all converted values to terminal
     return hex;
@@ -72,8 +69,6 @@ void go_through(Json::Value obj, Json::Value &objNew)
             go_through_array(*i, objNew[temp]);
         }
         else objNew[temp] = *i;
-
-
     }
 }
 void go_through_array(Json::Value obj, Json::Value &arrNew)
@@ -92,5 +87,4 @@ void go_through_array(Json::Value obj, Json::Value &arrNew)
             go_through_array(obj[i], arrNew[i]);
         }
         else arrNew[i] = obj[i];
-
 }
